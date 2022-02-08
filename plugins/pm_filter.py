@@ -37,15 +37,16 @@ async def give_filter(client, message):
         await auto_filter(client, message)
 
 
-@Client.on_callback_query(filters.regex(r"^next"))
+@Client.on_callback_query(filters.regex(r"^next,"))
 async def next_page(bot, query):
     ident, req, key, offset = query.data.split("_")
     if int(req) not in [query.from_user.id, 0]:
-        return await query.answer("സഹോ ഇതു നിങ്ങളുടെ requst alla {mention,user}", show_alert=True)
+        return await query.answer("സഹോ ഇതു നിങ്ങളുടെ requst alla, (userid)", show_alert=True)
+
     try:
         offset = int(offset)
     except:
-        offset = 0
+        offset = 1
     search = BUTTONS.get(key)
     if not search:
         await query.answer("You are using one of my old messages, please send the request again.", show_alert=True)
@@ -55,7 +56,7 @@ async def next_page(bot, query):
     try:
         n_offset = int(n_offset)
     except:
-        n_offset = 0
+        n_offset = 1
 
     if not files:
         return
@@ -404,31 +405,20 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await query.answer()
     elif query.data == "start":
         buttons = [[
-            
-            InlineKeyboardButton('🔍 Search', switch_inline_query_current_chat=''),
-            InlineKeyboardButton('🤖 Updates', url='https://t.me/mvbzzer')
+
+            InlineKeyboardButton('Movies Bazzer', url=t.me/mvbzzer),
         ], [
-            InlineKeyboardButton('ℹ️ Help', callback_data='help'),
-            InlineKeyboardButton('😊 About', callback_data='about')
+            InlineKeyboardButton('🔍 Search', switch_inline_query_current_chat=''),
+        ], [
+           
+            InlineKeyboardButton('😊 About', callback_data='about'),
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await query.message.edit_text(
             text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME),
             reply_markup=reply_markup,
             parse_mode='html'
-        )
-        await query.answer('Piracy Is Crime')
-    elif query.data == "help":
-        buttons = [[
-            InlineKeyboardButton('Manual Filter', callback_data='manuelfilter'),
-            InlineKeyboardButton('Auto Filter', callback_data='autofilter')
-        ], [
-            InlineKeyboardButton('Connection', callback_data='coct'),
-            InlineKeyboardButton('Extra Mods', callback_data='extra')
-        ], [
-            InlineKeyboardButton('🏠 Home', callback_data='start'),
-            InlineKeyboardButton('🔮 Status', callback_data='stats')
-        ]]
+        
         reply_markup = InlineKeyboardMarkup(buttons)
         await query.message.edit_text(
             text=script.HELP_TXT.format(query.from_user.mention),
@@ -437,7 +427,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         )
     elif query.data == "about":
         buttons = [[
-            InlineKeyboardButton('🤖 Updates', url='https://t.me/Mvbzzer'),
+            InlineKeyboardButton('🎩DEV', url='https://t.me/Grayhathacker767>illuzX'),
             InlineKeyboardButton('♥️ Source', callback_data='source')
         ], [
             InlineKeyboardButton('🏠 Home', callback_data='start'),
